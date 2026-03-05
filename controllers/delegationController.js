@@ -433,7 +433,10 @@ export const insertDelegationDoneAndUpdate = async (req, res) => {
       const updateQuery = `
         UPDATE delegation
         SET status = $1,
-            submission_date = date_trunc('second', NOW() AT TIME ZONE 'Asia/Kolkata'),
+            submission_date = CASE 
+                WHEN $1 IN ('done', 'partial_done') THEN date_trunc('second', NOW() AT TIME ZONE 'Asia/Kolkata') 
+                ELSE NULL 
+            END,
             updated_at = NOW() AT TIME ZONE 'Asia/Kolkata',
             remarks = $2,
             planned_date = $3,
