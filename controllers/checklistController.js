@@ -22,7 +22,7 @@ export const getPendingChecklist = async (req, res) => {
 `;
 
     // ⭐ If user is NOT admin → filter by name
-    if (role !== "admin" && role !== "super_admin" && username) {
+    if (role !== "admin" && role !== "super_admin" && role !== "pc role" && username) {
       where += ` AND LOWER(name) = LOWER('${username}') `;
     }
 
@@ -140,7 +140,7 @@ export const getChecklistHistory = async (req, res) => {
     let where = `submission_date IS NOT NULL`;
 
     // ⭐ Normal users see only their own tasks
-    if (role !== "admin" && role !== "super_admin" && username) {
+    if (role !== "admin" && role !== "super_admin" && role !== "pc role" && username) {
       where += ` AND LOWER(name) = LOWER('${username}') `;
     }
 

@@ -69,7 +69,7 @@ export const getDashboardData = async (req, res) => {
     // ---------------------------
     // ADMIN STAFF FILTER
     // ---------------------------
-    if ((role === "admin" || role === "super_admin") && staffFilter !== "all") {
+    if ((role === "admin" || role === "super_admin" || role === "pc role") && staffFilter !== "all") {
       query += ` AND LOWER(${table}.name) = LOWER('${staffFilter}')`;
     }
 
@@ -171,7 +171,7 @@ export const getTotalTask = async (req, res) => {
     }
 
     // STAFF FILTER (admin only)
-    if ((role === "admin" || role === "super_admin") && staffFilter !== "all") {
+    if ((role === "admin" || role === "super_admin" || role === "pc role") && staffFilter !== "all") {
       query += ` AND LOWER(name)=LOWER('${staffFilter}')`;
     }
 
@@ -211,7 +211,7 @@ export const getCompletedTask = async (req, res) => {
     }
 
     if (role === "user" && username) query += ` AND LOWER(name)=LOWER('${username}')`;
-    if ((role === "admin" || role === "super_admin") && staffFilter !== "all") query += ` AND LOWER(name)=LOWER('${staffFilter}')`;
+    if ((role === "admin" || role === "super_admin" || role === "pc role") && staffFilter !== "all") query += ` AND LOWER(name)=LOWER('${staffFilter}')`;
     if (dashboardType === "checklist" && departmentFilter !== "all")
       query += ` AND LOWER(department)=LOWER('${departmentFilter}')`;
 
@@ -275,7 +275,7 @@ export const getPendingTask = async (req, res) => {
     if (role === "user" && username)
       query += ` AND LOWER(name)=LOWER('${username}')`;
 
-    if ((role === "admin" || role === "super_admin") && staffFilter !== "all")
+    if ((role === "admin" || role === "super_admin" || role === "pc role") && staffFilter !== "all")
       query += ` AND LOWER(name)=LOWER('${staffFilter}')`;
 
     // Department filter
@@ -313,7 +313,7 @@ export const getNotDoneTask = async (req, res) => {
       query += ` AND name = '${username}'`;
     }
 
-    if ((role === "admin" || role === "super_admin") && staffFilter !== "all") {
+    if ((role === "admin" || role === "super_admin" || role === "pc role") && staffFilter !== "all") {
       query += ` AND name = '${staffFilter}'`;
     }
 
@@ -352,7 +352,7 @@ export const getOverdueTask = async (req, res) => {
       params.push(username);
     }
 
-    if ((role === "admin" || role === "super_admin") && staffFilter !== "all") {
+    if ((role === "admin" || role === "super_admin" || role === "pc role") && staffFilter !== "all") {
       query += ` AND LOWER(name)=LOWER($${idx++})`;
       params.push(staffFilter);
     }
@@ -633,7 +633,7 @@ export const getDashboardDataCount = async (req, res) => {
     }
 
     // ADMIN STAFF FILTER
-    if ((role === "admin" || role === "super_admin") && staffFilter !== "all") {
+    if ((role === "admin" || role === "super_admin" || role === "pc role") && staffFilter !== "all") {
       query += ` AND LOWER(name) = LOWER('${staffFilter}')`;
     }
 
@@ -729,7 +729,7 @@ export const getChecklistDateRangeCount = async (req, res) => {
     }
 
     // ADMIN STAFF FILTER
-    if ((role === "admin" || role === "super_admin") && staffFilter !== "all") {
+    if ((role === "admin" || role === "super_admin" || role === "pc role") && staffFilter !== "all") {
       query += ` AND LOWER(name) = LOWER($${idx++})`;
       params.push(staffFilter);
     }

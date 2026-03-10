@@ -49,7 +49,7 @@ export const fetchDelegationDataSortByDate = async (req, res) => {
     }
 
     // ADMIN: fetch ALL pending tasks (ignore user_access)
-    else if (role === "admin" || role === "super_admin") {
+    else if (role === "admin" || role === "super_admin" || role === "pc role") {
       query = `
         SELECT 
           task_id,
@@ -180,7 +180,7 @@ export const fetchDelegation_DoneDataSortByDate = async (req, res) => {
     }
 
     // ADMIN FILTER — Fetch based on user_access departments
-    if ((role === "admin" || role === "super_admin") && userAccess) {
+    if ((role === "admin" || role === "super_admin" || role === "pc role") && userAccess) {
       const depts = userAccess
         .replace(/\+/g, " ")
         .split(",")
