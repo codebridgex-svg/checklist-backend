@@ -1,54 +1,45 @@
-// s3Upload.js
+// supabaseUpload.js (formerly s3Upload.js)
 import multer from "multer";
-import { S3Client } from "@aws-sdk/client-s3";
-import { Upload } from "@aws-sdk/lib-storage";
+import { supabase } from "../config/supabaseClient.js";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-// 1️⃣ Initialize S3 client (AWS SDK v3)
-const s3 = new S3Client({
-  region: process.env.AWS_REGION, // e.g. "us-east-1"
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-});
-
-// 2️⃣ Multer setup (store in memory)
+// 1️⃣ Multer setup (store in memory)
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// 3️⃣ Upload function to S3
+// 2️⃣ Upload function to Supabase Storage
 export const uploadToS3 = async (file) => {
   try {
-    console.log("🚀 uploadToS3 called with:", {
+    console.log("🚀 uploadToSupabase called with:", {
       name: file.originalname,
       type: file.mimetype,
       size: file.buffer?.length
     });
 
-    const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: `uploads/${Date.now()}_${file.originalname}`,
-      Body: file.buffer,
-      ContentType: file.mimetype,
-    };
+    const fileName = `uploads/${Date.now()}_${file.originalname}`;
+    const { data, error } = await supabase.storage
+      .from(process.env.SUPABASE_BUCKET_NAME || 'checklist')
+      .upload(fileName, file.buffer, {
+        contentType: file.mimetype,
+        upsert: false
+      });
 
-    const parallelUploads3 = new Upload({
-      client: s3,
-      params,
-    });
+    if (error) throw error;
 
-    const result = await parallelUploads3.done();
-    console.log("✅ Uploaded to S3:", result.Location || params.Key);
+    console.log("✅ Uploaded to Supabase:", data.path);
 
-    return `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${params.Key}`;
+    // Construct the public URL
+    const { data: publicUrlData } = supabase.storage
+      .from(process.env.SUPABASE_BUCKET_NAME || 'checklist')
+      .getPublicUrl(fileName);
+
+    return publicUrlData.publicUrl;
   } catch (err) {
-    console.error("❌ Error uploading to S3:", err);
+    console.error("❌ Error uploading to Supabase:", err);
     throw err;
   }
 };
-
 
 export default upload;
