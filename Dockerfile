@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the port the app runs on
-EXPOSE 5000
+EXPOSE 5050
 
 # Command to run the application
 # Use "npm start" which is defined as "nodemon server.js" in package.json

@@ -87,7 +87,6 @@ app.use(
 );
 app.use(express.json({ limit: "25mb" }));
 app.use(express.urlencoded({ extended: true, limit: "25mb" }));
-app.use(express.json());
 
 // ROUTES
 app.use("/api/dashboard", dashboardRoutes);
@@ -106,7 +105,7 @@ app.use("/api/import", importRoutes);
 app.use("/api/leave", leaveRoutes);
 
 // SERVER RUN
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 // app.listen(PORT, () => {
 //   console.log(`🚀 Server running on port ${PORT}`);
 // });
