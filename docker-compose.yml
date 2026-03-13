@@ -9,4 +9,4 @@ services:
     
     # You can add your database environment variables here if needed
     env_file:
-      - .env
+      - ./.env
